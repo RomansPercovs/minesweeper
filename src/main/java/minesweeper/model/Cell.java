@@ -3,7 +3,7 @@ package minesweeper.model;
 public class Cell {
     boolean isMine;
     int minesAround;
-    boolean isClosed;
+    boolean isClosed = true;
 
     public boolean isMine() {
         return isMine;
