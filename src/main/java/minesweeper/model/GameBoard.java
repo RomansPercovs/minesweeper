@@ -8,6 +8,8 @@ import java.util.Random;
 public class GameBoard {
     private final int BOARD_SIZE = 10;
     private final int NUMBER_OF_MINES = 10;
+    private boolean gameOver = false;
+    private int openedCells = 0;
 
     public Cell[][] initializeBoard() {
         Cell[][] board = new Cell[BOARD_SIZE][];
@@ -19,6 +21,8 @@ public class GameBoard {
         }
         placeMines(board);
         checkMinesAround(board);
+        gameOver = false;
+        openedCells = 0;
 
         return board;
     }
@@ -46,19 +50,27 @@ public class GameBoard {
     }
 
     public String openCell(Cell[][] board, int numberOfCell) {
-        int actualNumber = numberOfCell - 1;
-        int row = (actualNumber - (actualNumber % 10)) / 10;
-        int cellInRow = actualNumber % BOARD_SIZE;
-        Cell cell = board[row][cellInRow];
-        cell.setClosed(false);
+        if(!gameOver) {
+            int actualNumber = numberOfCell - 1;
+            int row = (actualNumber - (actualNumber % 10)) / 10;
+            int cellInRow = actualNumber % BOARD_SIZE;
+            Cell cell = board[row][cellInRow];
+            cell.setClosed(false);
+            if (cell.isMine()) {
+                gameOver = true;
+            } else {
+                openedCells++;
+            }
+        }
         StringBuilder result = new StringBuilder();
         result.append(showFieldState(board)).append("\n");
-        if(cell.isMine()) {
+        if(gameOver) {
             result.append("Game over");
         }
-        if(isAllOpened(board)) {
+        if(openedCells == 90) {
             result.append("You win");
         }
+
         return result.toString();
     }
 
@@ -110,15 +122,4 @@ public class GameBoard {
         return i >= 0 && j >= 0 && i < BOARD_SIZE && j < BOARD_SIZE;
     }
 
-    private boolean isAllOpened(Cell[][] board) {
-        int openedCellsCount = 0;
-        for(int i = 0; i < BOARD_SIZE; i++) {
-            for(int j = 0; j < BOARD_SIZE; j++) {
-                if(!board[i][j].isClosed() && !board[i][j].isMine()) {
-                    openedCellsCount++;
-                }
-            }
-        }
-        return openedCellsCount == 90;
-    }
 }

@@ -29,7 +29,7 @@ public class MinesweeperServiceImpl implements MinesweeperService {
 
     public String openCell(int numberOfCell) throws MinesweeperException {
         if(numberOfCell <= 0 || numberOfCell > 100) {
-            throw new MinesweeperException("Number of cell should be between 0 and 100");
+            throw new MinesweeperException("Number of cell should be between 1 and 100");
         }
         if(board != null) {
             return gameBoard.openCell(board, numberOfCell);

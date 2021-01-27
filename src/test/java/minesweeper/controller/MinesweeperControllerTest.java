@@ -63,10 +63,10 @@ public class MinesweeperControllerTest {
 
     @Test
     public void openCell_returnInternalError() throws Exception {
-        when(minesweeperService.openCell(0)).thenThrow(new MinesweeperException("Number of cell should be between 0 and 100"));
+        when(minesweeperService.openCell(0)).thenThrow(new MinesweeperException("Number of cell should be between 1 and 100"));
         MvcResult result = mockMvc.perform(get("/open/{number}", 0))
                 .andExpect(status().isInternalServerError())
                 .andReturn();
-        assertEquals("Number of cell should be between 0 and 100", result.getResponse().getContentAsString());
+        assertEquals("Number of cell should be between 1 and 100", result.getResponse().getContentAsString());
     }
 }
